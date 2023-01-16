@@ -2,8 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:footer/footer.dart';
-import 'package:footer/footer_view.dart';
+
 
 class DescriptionPage extends StatefulWidget {
   late var name;
@@ -25,31 +24,45 @@ class _DescriptionPageState extends State<DescriptionPage> {
 
       backgroundColor: Color.fromRGBO(250, 250, 250, 30),
       body: Padding(
-        padding:  EdgeInsets.only(top: width/18),
+        padding: width<500? EdgeInsets.only(top: width/18):EdgeInsets.only(top: width/40),
         child: SingleChildScrollView(
           child: InteractiveViewer(
             child: Column(
               children: [
                 Padding(
-                  padding:  EdgeInsets.only(top: width/20),
+                  padding:  EdgeInsets.only(top: width/16),
                   child: Text(widget.name,style: TextStyle(fontSize: 25,color: Colors.red,fontWeight: FontWeight.bold)),
                 ),
                 Padding(
-                  padding:  EdgeInsets.only(top:width/25),
+                  padding: EdgeInsets.only(top: width/30),
                   child:  Row(
                     children:  [
                       Expanded(
 
                         child: Padding(
                           padding: EdgeInsets.only(left:8.0,right: 8.0),
-                          child: Text("       "+abc+abc+abc+abc+abc+abc,
-                            style: TextStyle(fontSize:15,color: Colors.black,height: width/300),
+                          child: Text(abc+abc+abc+abc+abc+abc,
+                            style: TextStyle(fontSize:15,color: Colors.black,height: width/440),
                             softWrap: true,
                             overflow: TextOverflow.fade,
                           ),
                         ),
                       ),
                     ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left:8.0,right: 8.0),
+                  child: RichText(
+
+                    text: TextSpan(
+
+                      style: TextStyle(fontSize:15,color: Colors.black,height: width/440),
+                      children:  <TextSpan>[
+                        TextSpan(text: abc+abc),
+                        TextSpan(text: abc+abc),
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
@@ -60,7 +73,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                         child: Padding(
                           padding: EdgeInsets.only(left:8.0,right: 8.0),
                           child: Text("       "+abc+abc+abc+abc,
-                            style: TextStyle(fontSize:15,height: width/300),
+                            style: TextStyle(fontSize:15,height: width/440),
                             softWrap: true,
 
                           ),
@@ -77,7 +90,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                         child: Padding(
                           padding: EdgeInsets.only(left:8.0,right: 8.0),
                           child: Text("      "+abc+abc+abc+abc+abc,
-                            style: TextStyle(fontSize:15,height: width/300),
+                            style: TextStyle(fontSize:15,height: width/440),
                             softWrap: true,
 
                           ),
@@ -94,7 +107,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                         child: Padding(
                           padding: EdgeInsets.only(left:8.0,right: 8.0),
                           child: Text("       "+abc+abc+abc+abc+abc+abc,
-                            style: TextStyle(fontSize:15,height: width/300),
+                            style: TextStyle(fontSize:15,height:width/440),
                             softWrap: true,
 
                           ),
