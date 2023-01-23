@@ -30,7 +30,8 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^3.0.1
-  flutter_native_splash: ^2.2.9
+
+  firebase_auth: ^4.2.5
   footer: ^0.0.4
   smooth_page_indicator: ^1.0.0+2
 
@@ -41,9 +42,6 @@ dependencies:
 
 
 
-flutter_native_splash:
-  color: "#302A2D"
-  image: images/yeni1.png
 dev_dependencies:
   flutter_test:
     sdk: flutter

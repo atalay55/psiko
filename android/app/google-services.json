@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "216055754236",
-    "project_id": "psiko10",
-    "storage_bucket": "psiko10.appspot.com"
+    "project_number": "40141355561",
+    "project_id": "psiko1-0",
+    "storage_bucket": "psiko1-0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:216055754236:android:5d27690f014cd3ccb69679",
+        "mobilesdk_app_id": "1:40141355561:android:01e557efe9a7fc7710fa38",
         "android_client_info": {
           "package_name": "com.example.psiko"
         }
       },
       "oauth_client": [
         {
-          "client_id": "216055754236-022un5k680upc44jhv5up3det6el5fvf.apps.googleusercontent.com",
+          "client_id": "40141355561-s4hnku802aj5utd3dmgefg2v2bluruem.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAA7KI22-hEktObM1RnhkU6VkaXx6ixBOM"
+          "current_key": "AIzaSyAsTqzjmJOPnnZl1tc_fmnnhgocwd-Qaho"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "216055754236-022un5k680upc44jhv5up3det6el5fvf.apps.googleusercontent.com",
+              "client_id": "40141355561-s4hnku802aj5utd3dmgefg2v2bluruem.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
