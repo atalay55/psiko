@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:psiko/Theme/mobileAgePage.dart';
-import '../Theme/DescAgePage.dart';
+import 'package:psiko/Mobile/mobileAgePage.dart';
+import '../Desktop/DescAgePage.dart';
 class AgePage extends StatelessWidget {
   late bool isGame;
 
   AgePage({required this.isGame});
+
 
   @override
   Widget build(BuildContext context) {

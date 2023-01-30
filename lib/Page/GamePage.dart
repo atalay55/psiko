@@ -1,77 +1,20 @@
 
 import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:psiko/Desktop/DesktopGamePage.dart';
+import '../Mobile/mobileGamePage.dart';
 
-class GamePage extends StatefulWidget {
-  const GamePage({Key? key}) : super(key: key);
+
+class GamePage extends StatelessWidget {
+
+  late String index;
+  GamePage({required this.index});
 
   @override
-  State<GamePage> createState() => _GamePageState();
+  Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.shortestSide<600;
+    print(isMobile.toString());
+    return isMobile ? mobileGamePage(index:index )
+        : DesktopGamePage(index:index ,);
+  }
 }
-
-class _GamePageState extends State<GamePage> {
-  final controller = PageController();
-  void dispose(){
-    controller.dispose();
-    super.dispose();
-  }
-  String abc="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-  @override
-  Widget build(BuildContext context){
-    late final width=MediaQuery.of(context).size.width;
-
-    return Scaffold(
-      body:PageView.builder(itemBuilder: (context,index){
-        return SingleChildScrollView(
-          child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-             crossAxisAlignment: CrossAxisAlignment.start,
-             children: [
-               SizedBox(
-                   width: width,
-                   child: Image.asset("images/game"+(index+1).toString()+".jpg")),
-               Row(
-                 children: [
-                   Expanded(
-                     child: Padding(
-                       padding:  EdgeInsets.only(top: width/15,left: width/40 ,right: width/40),
-                       child: Text("          "+abc+abc+abc+abc+abc,style: TextStyle(fontSize: 15,height: 1.5,color: Colors.black,letterSpacing: 0.5),),
-                     ),
-                   ),
-                 ],
-               ),
-
-
-             ],
-          ),
-      ),
-        );
-    },itemCount: 3,
-    controller: controller,
-      ),
-      bottomSheet: Padding(
-        padding:  EdgeInsets.only(bottom: width/8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            SmoothPageIndicator(
-              count: 3,
-              controller: controller,
-            effect: JumpingDotEffect(
-              dotWidth: width/20,
-            dotHeight: width/30,
-             verticalOffset: 20,
-              spacing: width/40
-            ),
-            ),
-          ],
-        ),
-      ),
-
-    );
-
-  }
-
-  }
 

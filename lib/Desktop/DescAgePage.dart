@@ -5,7 +5,7 @@ import 'package:psiko/Page/GamePage.dart';
 
 import '../Entity/InfoEntity.dart';
 import '../Page/DescriptionPage.dart';
-import 'CartTheme.dart';
+import '../Theme/CartTheme.dart';
 
 class DescAgePage extends StatelessWidget {
 
@@ -45,7 +45,7 @@ class DescAgePage extends StatelessWidget {
                   return Column(
                     children: [
                       Padding(
-                        padding:(width < 600
+                        padding:(width < 801
                             ? EdgeInsets.only(
                             top: width / 8,
                             left: width / 40,
@@ -70,12 +70,17 @@ class DescAgePage extends StatelessWidget {
                   );
                 } else {
                   return Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Data Not Found ", style: TextStyle(fontSize: 25),)
-                      ],
+                    child: Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                         CircularProgressIndicator(
+                           color: Colors.black,
+
+                         )
+                        ],
+                      ),
                     ),
                   );
                 }

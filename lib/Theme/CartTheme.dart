@@ -36,7 +36,7 @@ class CartTheme extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (contex) =>
-                              GamePage()));
+                              GamePage(index: (index+1).toString(),)));
                 } else {
                   Navigator.push(
                       context,

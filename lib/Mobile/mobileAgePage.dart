@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:psiko/Entity/Entity.dart';
-import 'CartTheme.dart';
+import '../Theme/CartTheme.dart';
 
 class MobileAgePage extends StatelessWidget {
   late bool isGame;
@@ -64,15 +64,17 @@ class MobileAgePage extends StatelessWidget {
                 );
               } else {
                 return Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Data Not Found ",
-                        style: TextStyle(fontSize: 25),
-                      )
-                    ],
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          color: Colors.black,
+
+                        )
+                      ],
+                    ),
                   ),
                 );
               }

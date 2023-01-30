@@ -2,8 +2,6 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:psiko/Entity/Entity.dart';
-import 'package:psiko/Entity/InfoEntity.dart';
 import 'package:psiko/Page/HomePage.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -26,7 +24,7 @@ class MyApp extends StatelessWidget {
       home: AnimatedSplashScreen(
         splash: Lottie.asset("asset/giris.json"),
         duration:2000,
-        animationDuration: Duration(milliseconds: 440),
+        animationDuration: Duration(milliseconds: 500),
         splashIconSize: 500,
         nextScreen: HomePage(),
       ),
