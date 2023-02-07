@@ -1,20 +1,14 @@
-
 import 'package:flutter/material.dart';
-import 'package:psiko/Desktop/DesktopGamePage.dart';
-import '../Mobile/mobileGamePage.dart';
-
+import 'package:psiko/Desktop/GamePsiko/DesktopGamePage.dart';
+import '../Mobile/GamePsiko/mobileGamePage.dart';
 
 class GamePage extends StatelessWidget {
-
-  late String index;
-  GamePage({required this.index});
-
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.shortestSide<600;
-    print(isMobile.toString());
-    return isMobile ? mobileGamePage(index:index )
-        : DesktopGamePage(index:index ,);
+    final isMobile = MediaQuery.of(context).size.shortestSide < 600;
+    if (isMobile) {print(isMobile);
+      return mobileGamePage();
+    }
+    return desktopGamePage();
   }
 }
-

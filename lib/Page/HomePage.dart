@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:psiko/Entity/Entity.dart';
+import 'package:psiko/Page/GamePage.dart';
 
 import 'AgePage.dart';
 
@@ -49,7 +50,7 @@ class _HomePageState extends State<HomePage> {
       ),
              GestureDetector(
                onTap: (){
-                 Navigator.push(context, MaterialPageRoute(builder: (context)=>AgePage(isGame: true,)));
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>GamePage()));
                },
                child: Container(
                  height: height/3,

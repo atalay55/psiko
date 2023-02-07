@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:psiko/Entity/Entity.dart';
-import 'package:psiko/Entity/InfoEntity.dart';
-
 import '../Page/DescriptionPage.dart';
-import '../Page/GamePage.dart';
 
 class CartTheme extends StatelessWidget {
 
-
-  late bool isGame;
   late double width;
   late List<Entity> entities;
+  late bool  isGame;
 
-  CartTheme({required this.entities,required this.isGame,required this.width});
+  CartTheme({required this.entities,required this.width, required this.isGame});
 
   @override
   Widget build(BuildContext context) {
@@ -31,19 +27,14 @@ class CartTheme extends StatelessWidget {
           itemBuilder: (BuildContext context, index) {
             return GestureDetector(
               onTap: () {
-                if (isGame) {
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (contex) =>
-                              GamePage(index: (index+1).toString(),)));
-                } else {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (contex) =>
-                              DescriptionPage(indexNum: (index+1).toString(),)));
-                }
+
+                              DescriptionPage(indexNum: (index+1).toString(),isGame: isGame,dataName: entities[index].name ,)));
+
               },
               child: Card(
                   shape: RoundedRectangleBorder(
@@ -58,7 +49,8 @@ class CartTheme extends StatelessWidget {
                         height:width<1250 ?(width<600
                             ? width / 2.5
                             : width / 3.5): width/4.5,
-                        child: ClipRRect(
+                        child:entities[index]
+                            .imagePath.isNotEmpty? ClipRRect(
                           child: Image(
                             image: AssetImage(
                                 entities[index]
@@ -73,6 +65,11 @@ class CartTheme extends StatelessWidget {
                               topRight:
                               Radius.circular(
                                   15)),
+                        ):Center(
+                          child: CircularProgressIndicator(
+
+                            color:Colors.deepOrange ,
+                          ),
                         ),
                       ),
                       Padding(
