@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:substring_highlight/substring_highlight.dart';
 
 import '../Entity/GameEntity.dart';
 
@@ -19,6 +21,8 @@ class GameCardThemeMobile extends StatefulWidget {
 
 class _GameCardThemeMobileState extends State<GameCardThemeMobile> {
   late int count = widget.count;
+  late bool isSearch= false;
+  late List<String> seacrh=[];
   late double width = widget.width;
   TextEditingController _controller = TextEditingController();
   var _key = GlobalKey<FormState>();
@@ -159,6 +163,7 @@ class _GameCardThemeMobileState extends State<GameCardThemeMobile> {
                                         ],
                                       )),
                                       onTap: () async {
+
                                         await Share.share(selected);
                                       },
                                     )
@@ -188,18 +193,37 @@ class _GameCardThemeMobileState extends State<GameCardThemeMobile> {
                                 ))),
                           SingleChildScrollView(
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 15),
-                              child: SelectableText(
+                              padding: EdgeInsets.only(
+                                  left: 15,right: 15 ,bottom: 50 ,top: 10),
+                              child: isSearch ?
+                              SubstringHighlight(
+                                  caseSensitive: false,
+                                  terms: seacrh,
+                                  text:widget.gameEntity[index].Text ,
+                                  textAlign: TextAlign.justify,
+                                  textStyleHighlight: TextStyle(color: Colors.red),
+                                  textStyle: GoogleFonts.notoSerif(
+                                    wordSpacing: 1.5,
+                                    color: Colors.black,
+                                    fontSize: dikeyFontSize,
+                                  ),
+                                  words: true):SelectableText(
                                   widget.gameEntity[index].Text,
-                                  style: TextStyle(fontSize: dikeyFontSize),
+                                  style:  GoogleFonts.notoSerif(
+                                    wordSpacing: 1.5,
+                                    color: Colors.black,
+                                    fontSize: dikeyFontSize,
+                                  ),
                                   textAlign: TextAlign.justify,
                                   onSelectionChanged:
                                       (TextSelection selection, cause) {
-                                selected = "";
-                                selected = widget.gameEntity[index].Text
-                                    .substring(selection.start - 10,
-                                        selection.end - 10);
+                                    setState(() {
+                                      selected = "";
+                                      selected = widget.gameEntity[index].Text
+                                          .substring(selection.start,
+                                          selection.end);
+                                    });
+
                               }),
                             ),
                           )
@@ -369,7 +393,7 @@ class _GameCardThemeMobileState extends State<GameCardThemeMobile> {
                               (widget.gameEntity[index].imagePath.isNotEmpty
                                   ? Padding(
                                       padding: EdgeInsets.only(
-                                          top: width / 50, right: width / 25),
+                                          top: width / 50,),
                                       child: SizedBox(
                                           width: width,
                                           height: width / 1.5,
@@ -385,23 +409,37 @@ class _GameCardThemeMobileState extends State<GameCardThemeMobile> {
                                     ))),
                               Expanded(
                                 child: Container(
-                                  height: width,
+
                                   child: SingleChildScrollView(
-                                    child: SelectableText(
-                                      widget.gameEntity[index].Text,
-                                      onSelectionChanged:
-                                          (TextSelection selection, cause) {
-                                        selected = "";
-                                        selected = widget.gameEntity[index].Text
-                                            .substring(selection.start - 10,
-                                                selection.end - 10);
-                                      },
-                                      style: TextStyle(
-                                          fontSize: dikeyFontSize,
-                                          height: 1.5,
+                                    padding: EdgeInsets.only(left: 15,right: 15, bottom: 50),
+                                    child:isSearch?
+                                    SubstringHighlight(
+                                        caseSensitive: false,
+                                        terms: seacrh,
+                                        text:widget.gameEntity[index].Text ,
+                                        textAlign: TextAlign.justify,
+                                        textStyleHighlight: TextStyle(color: Colors.red),
+                                        textStyle: GoogleFonts.notoSerif(
+                                          wordSpacing: 1.1,
                                           color: Colors.black,
-                                          letterSpacing: 0.5),
-                                    ),
+                                          fontSize: dikeyFontSize,
+                                        ),
+                                        words: true) : SelectableText(
+                                          widget.gameEntity[index].Text,
+                                          onSelectionChanged:
+                                              (TextSelection selection, cause) {
+                                            selected = "";
+                                            selected = widget.gameEntity[index].Text
+                                                .substring(selection.start,
+                                                    selection.end);
+                                          },
+                                          textAlign: TextAlign.justify,
+                                          style: GoogleFonts.notoSerif(
+                                            wordSpacing: 1.1,
+                                            color: Colors.black,
+                                            fontSize: dikeyFontSize,
+                                          ),
+                                        ),
                                   ),
                                 ),
                               ),
@@ -451,24 +489,34 @@ class _GameCardThemeMobileState extends State<GameCardThemeMobile> {
                   controller: _controller,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                    borderSide: BorderSide(
-                      color: Colors.grey,
-                      width: 2.0,
-                    ),
-                  ))),
+                        borderRadius: BorderRadius.circular(5.0),
+                        borderSide: BorderSide(
+                          color: Colors.grey,
+                          width: 2.0,
+                        ),
+                      ))),
             ),
             actions: [
               TextButton(
                   onPressed: () {
-                    _controller.text = "";
-                    Navigator.pop(context);
+                    setState(() {
+                      _controller.text = "";
+                      seacrh.clear();
+                      isSearch=false;
+                      Navigator.pop(context);
+                    });
+
                   },
                   child: Text("çıkış")),
               TextButton(
                   onPressed: () {
                     setState(() {
-                      //findWord(_controller.text);
+                      seacrh.clear();
+                      isSearch=true;
+                      seacrh.add(_controller.text);
+                      _controller.text = "";
+
+                      Navigator.pop(context);
                     });
                   },
                   child: Text("ara")),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:psiko/Theme/MyTextTheme.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../Entity/InfoEntity.dart';
@@ -27,25 +28,14 @@ class _DesktopDescriptionPageState extends State<DesktopDescriptionPage> {
   var _key = GlobalKey<FormState>();
   late double dikeyFontSize = width / 25;
   late double fontheigth = width / 600;
-  late List<String> allData = [];
+  late String selected="";
+  late List<String> search=[];
+  late bool isSearch =false;
 
-
-  void findWord(String word) {
-    allData = allData.first.toLowerCase().split(" ");
-    for (String a in allData) {
-      if (a == word.toLowerCase()) {
-        print(allData.indexOf(word));
-        continue;
-      } else {
-        continue;
-      }
-    }
-  }
 
 
   @override
   Widget build(BuildContext context) {
-    late String selected;
     late bool portrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
@@ -54,8 +44,7 @@ class _DesktopDescriptionPageState extends State<DesktopDescriptionPage> {
           future: widget.getInfo(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              allData.clear();
-              allData.add(snapshot.data!.p1.toString());
+
 
               return Padding(
                 padding: portrait
@@ -190,7 +179,8 @@ class _DesktopDescriptionPageState extends State<DesktopDescriptionPage> {
                                             ],
                                           )),
                                       onTap: ()async{
-                                        await Share.share(selected);
+                                        print(selected+ "selected");
+                                        await Share.share(selected.isNotEmpty? selected: " ");
                                       },
                                     )
                                   ],
@@ -198,137 +188,11 @@ class _DesktopDescriptionPageState extends State<DesktopDescriptionPage> {
                               )
                             ],
                           ),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 8.0, right: 8, top: width / 50),
-                              child: TextSelectionTheme(
-                                data: TextSelectionThemeData(
-                                    cursorColor: Colors.blueAccent,
-                                    selectionColor: Colors.green,
-                                    selectionHandleColor: Colors.blueAccent),
-                                child: SelectableText.rich(
-                                  showCursor: true,
-                                  cursorRadius: Radius.circular(20),
-                                  cursorWidth: 3,
-                                  textAlign: TextAlign.justify,
-                                  onSelectionChanged: (TextSelection selection, cause) {
-                                    selected="";
-                                    selected=snapshot.data!.p1.substring(selection.start-10,selection.end-10);
-                                  },
-                                  enableInteractiveSelection: true,
-                                  toolbarOptions: ToolbarOptions(
-                                      copy: true, cut: true, selectAll: true),
-                                  TextSpan(
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black,
-                                        height: width / 700),
-                                    children: <TextSpan>[
-                                      TextSpan(text: "          "),
-                                      TextSpan(
-                                          text: snapshot.data!.p1,
-                                          style: GoogleFonts.notoSerif(
-                                              wordSpacing: 1.5,
-                                              color: Colors.black,
-                                              fontSize: dikeyFontSize,
-                                              height: fontheigth))
-                                    ],
-                                  ),
-                                ),
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 8.0, right: 8, top: width / 50),
-                              child: SelectableText.rich(
-                                textAlign: TextAlign.justify,
-                                showCursor: true,
-                                cursorRadius: Radius.circular(5),
-                                onSelectionChanged: (TextSelection selection, cause) {
-                                  selected="";
-                                  selected=snapshot.data!.p2!.substring(selection.start-10,selection.end-10);
-                                },
-                                cursorWidth: 2,
-                                toolbarOptions: ToolbarOptions(
-                                    copy: true, cut: true, selectAll: true),
-                                TextSpan(
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      height: width / 400),
-                                  children: <TextSpan>[
-                                    TextSpan(text: "          "),
-                                    TextSpan(
-                                        text: snapshot.data!.p2,
-                                        style: GoogleFonts.notoSerif(
-                                            wordSpacing: 1.5,
-                                            color: Colors.black,
-                                            fontSize: dikeyFontSize,
-                                            height: fontheigth))
-                                  ],
-                                ),
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 8.0, right: 8, top: width / 50),
-                              child: SelectableText.rich(
-                                showCursor: true,
-                                cursorRadius: Radius.circular(5),
-                                cursorWidth: 2,
-                                textAlign: TextAlign.justify,
-                                onSelectionChanged: (TextSelection selection, cause) {
-                                  selected="";
-                                  selected=snapshot.data!.p3!.substring(selection.start-10,selection.end-10);
-                                },
-                                toolbarOptions: ToolbarOptions(
-                                    copy: true, cut: true, selectAll: true),
-                                TextSpan(
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      height: width / 400),
-                                  children: <TextSpan>[
-                                    TextSpan(text: "          "),
-                                    TextSpan(
-                                        text: snapshot.data!.p3,
-                                        style: GoogleFonts.notoSerif(
-                                            wordSpacing: 1.5,
-                                            color: Colors.black,
-                                            fontSize: dikeyFontSize,
-                                            height: fontheigth))
-                                  ],
-                                ),
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 8.0, right: 8, top: width / 50),
-                              child: SelectableText.rich(
-                                showCursor: true,
-                                cursorRadius: Radius.circular(5),
-                                cursorWidth: 2,
-                                textAlign: TextAlign.justify,
-                                onSelectionChanged: (TextSelection selection, cause) {
-                                  selected="";
-                                  selected=snapshot.data!.p4!.substring(selection.start-10,selection.end-10);
-                                },
-                                toolbarOptions: ToolbarOptions(
-                                    copy: true, cut: true, selectAll: true),
-                                TextSpan(
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      height: width / 400),
-                                  children: <TextSpan>[
-                                    TextSpan(text: "          "),
-                                    TextSpan(
-                                        text: snapshot.data!.p4,
-                                        style: GoogleFonts.notoSerif(
-                                            wordSpacing: 1.5,
-                                            color: Colors.black,
-                                            fontSize: dikeyFontSize,
-                                            height: fontheigth))
-                                  ],
-                                ),
-                              )),
+                          MyTextTheme(isSearch: isSearch, width: width, txt: snapshot.data!.p1, selected: selected, dikeyFontSize: dikeyFontSize, seacrh: search),
+                          MyTextTheme(isSearch: isSearch, width: width, txt: snapshot.data!.p2, selected: selected, dikeyFontSize: dikeyFontSize, seacrh: search),
+                          MyTextTheme(isSearch: isSearch, width: width, txt: snapshot.data!.p3, selected: selected, dikeyFontSize: dikeyFontSize, seacrh: search),
+                          MyTextTheme(isSearch: isSearch, width: width, txt: snapshot.data!.p4, selected: selected, dikeyFontSize: dikeyFontSize, seacrh: search),
+
                         ],
                       ),
                     ),
@@ -377,14 +241,24 @@ class _DesktopDescriptionPageState extends State<DesktopDescriptionPage> {
             actions: [
               TextButton(
                   onPressed: () {
-                    _controller.text = "";
-                    Navigator.pop(context);
+                    setState(() {
+                      _controller.text = "";
+                      search.clear();
+                      isSearch=false;
+                      Navigator.pop(context);
+                    });
+
                   },
                   child: Text("çıkış")),
               TextButton(
                   onPressed: () {
                     setState(() {
-                      findWord(_controller.text);
+                      search.clear();
+                      isSearch=true;
+                      search.add(_controller.text);
+                      _controller.text = "";
+
+                      Navigator.pop(context);
                     });
                   },
                   child: Text("ara")),

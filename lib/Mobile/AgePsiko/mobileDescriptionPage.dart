@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:psiko/Theme/MyTextTheme.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../Entity/InfoEntity.dart';
@@ -30,28 +31,17 @@ class MobileDescriptionPage extends StatefulWidget {
 
 class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
   late double width = MediaQuery.of(context).size.shortestSide;
+  late bool isSearch =false;
   TextEditingController _controller = TextEditingController();
   var _key = GlobalKey<FormState>();
-  late double dikeyFontSize = width / 25;
-  late List<String> allData = [];
-  late List<int> indexs=[];
+  late double dikeyFontSize = width / 22;
+  late List<String> search=[];
+  late String selected="";
 
-  void findWord(String word) {
-    indexs.clear();
-    allData = allData.first.toLowerCase().split(" ");
-    for (int i =0 ;i<allData.length ; i++) {
-      print(allData[i]);
-       if (allData[i] == word.toLowerCase()) {
-         indexs.add(i);
-         print(indexs.length);
-      } else {
-        continue;
-      }
-    }
-  }
+
   @override
   Widget build(BuildContext context) {
-    late String selected;
+
     late bool portrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
@@ -60,9 +50,6 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
           future: widget.getInfo(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              allData.clear();
-              allData.add(snapshot.data!.p1.toString());
-
               return Padding(
                 padding: portrait
                     ? EdgeInsets.only(top: width / 18)
@@ -91,8 +78,7 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
                                             fontWeight: FontWeight.bold)),
                                   ),
                                 ),
-                              ),
-                              Padding(
+                              ), Padding(
                                 padding: EdgeInsets.only(
                                   top: 15,
                                 ),
@@ -196,7 +182,8 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
                                             ],
                                           )),
                                       onTap: ()async{
-                                        await Share.share(selected);
+                                        print(selected+ "selected");
+                                        await Share.share(selected.isNotEmpty? selected: " ");
                                       },
                                     )
                                   ],
@@ -204,142 +191,14 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
                               )
                             ],
                           ),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 8.0, right: 8, top: width / 50),
-                              child: TextSelectionTheme(
-                                data: TextSelectionThemeData(
-                                    cursorColor: Colors.blueAccent,
-                                    selectionColor: Colors.green,
-                                    selectionHandleColor: Colors.blueAccent),
-                                child: SelectableText.rich(
-                                  showCursor: true,
-                                  cursorRadius: Radius.circular(20),
-                                  cursorWidth: 3,
-                                  textAlign: TextAlign.justify,
-                                  scrollPhysics: ClampingScrollPhysics(),
-                                  onSelectionChanged: (TextSelection selection, cause) {
-                                    selected="";
-                                    selected=snapshot.data!.p1.substring(selection.start-10,selection.end-10);
-                                  },
-                                  enableInteractiveSelection: true,
-                                  toolbarOptions: ToolbarOptions(
-                                      copy: true, cut: true, selectAll: true),
-                                  TextSpan(
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black,
-                                        height: width / 400),
-                                    children: <TextSpan>[
-                                      TextSpan(text: "          "),
-                                      TextSpan(
-                                          text: snapshot.data!.p1,
-                                          style: GoogleFonts.notoSerif(
-                                              wordSpacing: 1.5,
-                                              color: Colors.black,
-                                              fontSize: dikeyFontSize,
-                                              height: width / 250))
-                                    ],
-                                  ),
-                                ),
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 8.0, right: 8, top: width / 50),
-                              child: SelectableText.rich(
-                                textAlign: TextAlign.justify,
-                                showCursor: true,
-                                cursorRadius: Radius.circular(5),
-                                scrollPhysics: ClampingScrollPhysics(),
-                                cursorWidth: 2,
-                                onSelectionChanged: (TextSelection selection, cause) {
-                                  selected="";
-                                  selected=snapshot.data!.p2!.substring(selection.start-10,selection.end-10);
-                                },
-                                toolbarOptions: ToolbarOptions(
-                                    copy: true, cut: true, selectAll: true),
-                                TextSpan(
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      height: width / 400),
-                                  children: <TextSpan>[
-                                    TextSpan(text: "            "),
-                                    allData.isEmpty? TextSpan( text: allData[indexs[0]],style: TextStyle(color: Colors.green)):TextSpan(),
-                                    TextSpan(
-                                        text: snapshot.data!.p2,
-                                        style: GoogleFonts.notoSerif(
-                                            wordSpacing: 1.5,
-                                            color: Colors.black,
-                                            fontSize: dikeyFontSize,
-                                            height: width / 250))
-                                  ],
-                                ),
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 8.0, right: 8, top: width / 50),
-                              child: SelectableText.rich(
-                                showCursor: true,
-                                cursorRadius: Radius.circular(5),
-                                cursorWidth: 2,
-                                textAlign: TextAlign.justify,
-                                scrollPhysics: ClampingScrollPhysics(),
-                                onSelectionChanged: (TextSelection selection, cause) {
-                                  selected="";
-                                  selected=snapshot.data!.p3!.substring(selection.start-10,selection.end-10);
-                                },
-                                toolbarOptions: ToolbarOptions(
-                                    copy: true, cut: true, selectAll: true),
-                                TextSpan(
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      height: width / 400),
-                                  children: <TextSpan>[
-                                    TextSpan(text: "            "),
-                                    TextSpan(
-                                        text: snapshot.data!.p3,
-                                        style: GoogleFonts.notoSerif(
-                                            wordSpacing: 1.5,
-                                            color: Colors.black,
-                                            fontSize: dikeyFontSize,
-                                            height: width / 250))
-                                  ],
-                                ),
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 8.0, right: 8, top: width / 50),
-                              child: SelectableText.rich(
-                                showCursor: true,
-                                cursorRadius: Radius.circular(5),
-                                cursorWidth: 2,
-                                scrollPhysics: ClampingScrollPhysics(),
-                                textAlign: TextAlign.justify,
-                                onSelectionChanged: (TextSelection selection, cause) {
-                                  selected="";
-                                  selected=snapshot.data!.p4!.substring(selection.start-10,selection.end-10);
-                                },
-                                toolbarOptions: ToolbarOptions(
-                                    copy: true, cut: true, selectAll: true),
-                                TextSpan(
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      height: width / 400),
-                                  children: <TextSpan>[
-                                    TextSpan(text: "            "),
-                                    TextSpan(
-                                        text: snapshot.data!.p4,
-                                        style: GoogleFonts.notoSerif(
-                                            wordSpacing: 1.5,
-                                            color: Colors.black,
-                                            fontSize: dikeyFontSize,
-                                            height: width / 250))
-                                  ],
-                                ),
-                              )),
+                          MyTextTheme(seacrh:search ,isSearch: isSearch, width: width, txt: snapshot.data!.p1,
+                              selected: selected, dikeyFontSize: dikeyFontSize),
+                          MyTextTheme(seacrh:search ,isSearch: isSearch, width: width, txt: snapshot.data!.p2,
+                              selected: selected, dikeyFontSize: dikeyFontSize),
+                          MyTextTheme(seacrh:search ,isSearch: isSearch, width: width, txt: snapshot.data!.p3,
+                              selected: selected, dikeyFontSize: dikeyFontSize),
+                          MyTextTheme(seacrh:search ,isSearch: isSearch, width: width, txt: snapshot.data!.p4,
+                              selected: selected, dikeyFontSize: dikeyFontSize),
                         ],
                       ),
                     ),
@@ -365,7 +224,6 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
         ));
   }
 
-
   allertDialog(context) {
     showDialog(
         context: context,
@@ -389,14 +247,24 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
             actions: [
               TextButton(
                   onPressed: () {
-                    _controller.text = "";
-                    Navigator.pop(context);
+                    setState(() {
+                      _controller.text = "";
+                      search.clear();
+                      isSearch=false;
+                      Navigator.pop(context);
+                    });
+
                   },
                   child: Text("çıkış")),
               TextButton(
                   onPressed: () {
                     setState(() {
-                      findWord(_controller.text);
+                      search.clear();
+                      isSearch=true;
+                      search.add(_controller.text);
+                      _controller.text = "";
+
+                      Navigator.pop(context);
                     });
                   },
                   child: Text("ara")),
