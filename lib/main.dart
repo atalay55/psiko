@@ -1,6 +1,9 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:psiko/Models/ZoomCubicModel.dart';
 import 'package:psiko/Page/HomePage.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -17,8 +20,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return GetMaterialApp(
+      title: 'Psiko',
       debugShowCheckedModeBanner: false,
       home: AnimatedSplashScreen(
         splash: Lottie.asset("asset/giris.json"),

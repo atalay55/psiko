@@ -5,5 +5,6 @@ class InfoEntity{
   late final String? p2;
   late final String? p3;
   late final String? p4;
-  InfoEntity({required this.name,required this.p1, this.p2, this.p3, this.p4});
+  late final String? p5;
+  InfoEntity({required this.name,required this.p1, this.p2, this.p3,this.p4, this.p5});
 }

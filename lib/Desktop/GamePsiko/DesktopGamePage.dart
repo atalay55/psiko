@@ -1,26 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:psiko/Database/EntityDb.dart';
 
 import '../../Entity/Entity.dart';
 import '../../Theme/CartTheme.dart';
 
 class desktopGamePage extends StatelessWidget {
-  FirebaseFirestore fire = FirebaseFirestore.instance;
-
-  Future<List<Entity>> getEntity() async {
-    late List<Entity> entites = [];
-    entites.clear();
-    await FirebaseFirestore.instance
-        .collection("GameAgeEntity")
-        .get()
-        .then((QuerySnapshot q) {
-      q.docs.forEach((element) {
-        entites.add(
-            Entity(name: element["name"], imagePath: element["imagePath"]));
-      });
-    });
-    return entites;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +15,7 @@ class desktopGamePage extends StatelessWidget {
     return Scaffold(
         backgroundColor: Color.fromRGBO(232, 208, 182, 100),
         body: FutureBuilder<List<Entity>>(
-            future: getEntity(),
+            future: EntityDb().getEntity("GameAgeEntity"),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Column(

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:psiko/Database/EntityDb.dart';
 import '../../Entity/GameEntity.dart';
 import '../../Theme/GameCardThemeDesc.dart';
 
@@ -17,21 +18,6 @@ class _desktopGameDescriptionPageState extends State<desktopGameDescriptionPage>
     super.dispose();
   }
 
-  FirebaseFirestore fire = FirebaseFirestore.instance;
-
-  Future<List<GameEntity>> getEntity() async {
-    late List<GameEntity> games = [];
-    games.clear();
-    await FirebaseFirestore.instance
-        .collection(widget.dataName+" oyunlar")
-        .get()
-        .then((QuerySnapshot q) {
-      q.docs.forEach((element) {
-        games.add(GameEntity(name: element["name"], imagePath: element["imagePath"], Text: element["gameText"]));
-      });
-    });
-    return games;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +25,7 @@ class _desktopGameDescriptionPageState extends State<desktopGameDescriptionPage>
 
     return Scaffold(
         body:FutureBuilder<List<GameEntity>>(
-            future: getEntity(),
+            future: EntityDb().getGameEntity(widget.dataName+" oyunlar"),
             builder: (context, snapchat) {
               if(snapchat.hasData){
                     return GameCardThemeDesc(gameEntity: snapchat.data!, width: width,count: snapchat.data!.length.toInt(),);

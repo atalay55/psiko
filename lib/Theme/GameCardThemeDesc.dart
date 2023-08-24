@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:psiko/Theme/ErrorWidgetTheme.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
+import 'package:substring_highlight/substring_highlight.dart';
 import '../Entity/GameEntity.dart';
+import '../Models/ZoomCubicModel.dart';
+import 'myPopMenu.dart';
 
 class GameCardThemeDesc extends StatefulWidget {
   List<GameEntity> gameEntity;
@@ -18,12 +22,12 @@ class GameCardThemeDesc extends StatefulWidget {
 
 class _GameCardThemeDescState extends State<GameCardThemeDesc> {
   late int count = widget.count;
+  late bool isSearch = false;
+  late List<String> seacrh = [];
   late double width = widget.width;
   TextEditingController _controller = TextEditingController();
   var _key = GlobalKey<FormState>();
   final controller = PageController();
-  late String selected;
-  late double dikeyFontSize = width / 25;
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +36,129 @@ class _GameCardThemeDescState extends State<GameCardThemeDesc> {
 
     return portrait
         ? Scaffold(
-        body: PageView.builder(
-            itemBuilder: (context, index) {
-              return SingleChildScrollView(
-                child: InteractiveViewer(
-                  child: Column(
+            body: PageView.builder(
+                itemBuilder: (context, index) {
+                  return SingleChildScrollView(
+                    child: InteractiveViewer(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Center(
+                                child: Padding(
+                                    padding: EdgeInsets.only(
+                                        top: width / 15, right: width / 2.5),
+                                    child: BlocBuilder<ZoomCubicModel, int>(
+                                        builder: (context, fontsize) {
+                                      return Text(
+                                        widget.gameEntity[index].name,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: fontsize + 20),
+                                      );
+                                    })),
+                              ),
+                              myPopMenu(allertDialog: allertDialog)
+                            ],
+                          ),
+                          (widget.gameEntity[index].imagePath.isNotEmpty
+                              ? BlocBuilder<ZoomCubicModel, int>(
+                                  builder: (context, fontsize) {
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                        top: width / 50,
+                                        right: width / 25,
+                                        left: width / 25),
+                                    child: SizedBox(
+                                        width:
+                                            width / 1.2 + fontsize.toDouble(),
+                                        height: width / 2 + fontsize.toDouble(),
+                                        child: Image.asset(widget
+                                            .gameEntity[index].imagePath)),
+                                  );
+                                })
+                              : Center(
+                                  child: Padding(
+                                  padding: EdgeInsets.only(top: width / 15),
+                                  child: CircularProgressIndicator(
+                                    color: Colors.red,
+                                  ),
+                                ))),
+                          SingleChildScrollView(child:
+                              BlocBuilder<ZoomCubicModel, int>(
+                                  builder: (context, fontsize) {
+                            return Padding(
+                                padding: EdgeInsets.only(
+                                    left: 15, right: 15, bottom: 50, top: 10),
+                                child: isSearch
+                                    ? SubstringHighlight(
+                                        caseSensitive: false,
+                                        terms: seacrh,
+                                        text: widget.gameEntity[index].Text,
+                                        textAlign: TextAlign.justify,
+                                        textStyleHighlight:
+                                            TextStyle(color: Colors.red),
+                                        textStyle: GoogleFonts.notoSerif(
+                                          color: Colors.black,
+                                          fontSize: fontsize.toDouble(),
+                                        ),
+                                        words: true)
+                                    : SelectableText(
+                                        widget.gameEntity[index].Text,
+                                        style: GoogleFonts.notoSerif(
+                                          color: Colors.black,
+                                          fontSize: fontsize.toDouble(),
+                                        ),
+                                        textAlign: TextAlign.justify,
+                                        onSelectionChanged:
+                                            (TextSelection selection, cause) {
+                                        var selected = widget
+                                            .gameEntity[index].Text
+                                            .substring(
+                                                selection.start, selection.end);
+                                        print(selected);
+                                        context
+                                            .read<SelectedCubitModel>()
+                                            .setSelected(selected);
+                                      }));
+                          }))
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                controller: controller,
+                itemCount: count),
+            bottomSheet: Container(
+              height: width / 15,
+              color: Colors.black26,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SmoothPageIndicator(
+                      count: count,
+                      controller: controller,
+                      effect: JumpingDotEffect(
+                          dotWidth: width / 20,
+                          dotHeight: width / 30,
+                          verticalOffset: 5,
+                          spacing: width / 40),
+                    ),
+                  ],
+                ),
+              ),
+            ))
+        : Scaffold(
+            body: PageView.builder(
+                itemBuilder: (context, index) {
+                  return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -46,435 +168,166 @@ class _GameCardThemeDescState extends State<GameCardThemeDesc> {
                         children: [
                           Center(
                             child: Padding(
-                              padding: EdgeInsets.only(top: width / 10),
-                              child: Text(
-                                widget.gameEntity[index].name,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: dikeyFontSize + 20),
-                              ),
+                              padding: EdgeInsets.only(
+                                  top: width / 10, right: width / 5),
+                              child: BlocBuilder<ZoomCubicModel, int>(
+                                  builder: (context, fontsize) {
+                                return Text(
+                                  widget.gameEntity[index].name,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: fontsize.toDouble() + 30),
+                                );
+                              }),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: width / 10, left: width / 2.5,right: width/40),
-                            child: PopupMenuButton(
-                              onSelected: (value) {
-                                setState(() {
-                                  if (value == 2) {
-                                    allertDialog(context);
-                                  }
-                                });
-                              },
-                              icon: Icon(Icons.more_vert_outlined,size: 35,),
-                              constraints: BoxConstraints.expand(
-                                  width: 150, height: 200),
-                              color: Colors.grey,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(20))),
-                              itemBuilder: (context) => [
-                                PopupMenuItem(
-                                  value: 0,
-                                  child: Center(
-                                      child: Row(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.add_circle_outline),
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 8.0),
-                                            child: Text("Yakınlaştır"),
-                                          )
-                                        ],
-                                      )),
-                                  onTap: () {
-                                    setState(() {
-                                      dikeyFontSize += 5;
-                                    });
-                                  },
-                                ),
-                                PopupMenuItem(
-                                  value: 1,
-                                  child: Center(
-                                      child: Row(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons
-                                              .remove_circle_outline_outlined),
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 8.0),
-                                            child: Text("Uzaklastır"),
-                                          )
-                                        ],
-                                      )),
-                                  onTap: () {
-                                    setState(() {
-                                      dikeyFontSize -= 5;
-                                    });
-                                  },
-                                ),
-                                PopupMenuItem(
-                                  value: 2,
-                                  child: Center(
-                                      child: Row(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.search_off_outlined),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              right: 45,
-                                            ),
-                                            child: Text(" Bul"),
-                                          )
-                                        ],
-                                      )),
-                                ),
-                                PopupMenuItem(
-                                  value: 3,
-                                  child: Center(
-                                      child: Row(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons
-                                              .share_arrival_time_outlined),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              right: 15,
-                                            ),
-                                            child: Text(" Paylaş"),
-                                          )
-                                        ],
-                                      )),
-                                  onTap: () async {
-                                    await Share.share(selected);
-                                  },
-                                )
-                              ],
-                            ),
-                          ),
+                          myPopMenu(allertDialog: allertDialog)
                         ],
                       ),
-                      (widget.gameEntity[index].imagePath.isNotEmpty
-                          ? Padding(
-                        padding: EdgeInsets.only(
-                            top: width / 50,
-                            right: width / 25,
-                            left: width / 25),
-                        child: SizedBox(
-                            width: width / 1.2 + dikeyFontSize,
-                            height: width / 2 + dikeyFontSize,
-                            child: Image.asset(
-                                widget.gameEntity[index].imagePath)),
-                      )
-                          : Center(
-                          child: Padding(
-                            padding: EdgeInsets.only(top: width / 15),
-                            child: CircularProgressIndicator(
-                              color: Colors.red,
-                            ),
-                          ))),
-                      Container(
-
+                      Flexible(
                         child: SingleChildScrollView(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 15),
-                            child: SelectableText(
-                                widget.gameEntity[index].Text,
-                                style: TextStyle(fontSize: dikeyFontSize),
-                                textAlign: TextAlign.justify,
-                                onSelectionChanged:
-                                    (TextSelection selection, cause) {
-                                  selected = "";
-                                  selected = widget.gameEntity[index].Text
-                                      .substring(selection.start ,
-                                      selection.end );
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              (widget.gameEntity[index].imagePath.isNotEmpty
+                                  ? Padding(
+                                      padding: EdgeInsets.only(
+                                        top: width / 50,
+                                      ),
+                                      child: SizedBox(
+                                          width: width,
+                                          height: width / 1.5,
+                                          child: Image.asset(widget
+                                              .gameEntity[index].imagePath)),
+                                    )
+                                  : ErrorWidgetTheme()),
+                              Expanded(
+                                child: BlocBuilder<ZoomCubicModel, int>(
+                                    builder: (context, fontsize) {
+                                  return Container(
+                                    child: SingleChildScrollView(
+                                      padding: EdgeInsets.only(
+                                          left: 15, right: 15, bottom: 50),
+                                      child: isSearch
+                                          ? SubstringHighlight(
+                                              caseSensitive: false,
+                                              terms: seacrh,
+                                              text:
+                                                  widget.gameEntity[index].Text,
+                                              textAlign: TextAlign.justify,
+                                              textStyleHighlight:
+                                                  TextStyle(color: Colors.red),
+                                              textStyle: GoogleFonts.notoSerif(
+                                                wordSpacing: 1.1,
+                                                color: Colors.black,
+                                                fontSize: fontsize.toDouble(),
+                                              ),
+                                              words: true)
+                                          : SelectableText(
+                                              widget.gameEntity[index].Text,
+                                              onSelectionChanged:
+                                                  (TextSelection selection,
+                                                      cause) {
+                                                var selected = widget
+                                                    .gameEntity[index].Text
+                                                    .substring(selection.start,
+                                                        selection.end);
+                                                print(selected);
+                                                context
+                                                    .read<SelectedCubitModel>()
+                                                    .setSelected(selected);
+                                              },
+                                              textAlign: TextAlign.justify,
+                                              style: GoogleFonts.notoSerif(
+                                                wordSpacing: 1.1,
+                                                color: Colors.black,
+                                                fontSize: fontsize.toDouble(),
+                                              ),
+                                            ),
+                                    ),
+                                  );
                                 }),
+                              ),
+                            ],
                           ),
                         ),
                       )
                     ],
-                  ),
-                ),
-              );
-            },
-            controller: controller,
-            itemCount: count),
-        bottomSheet: Container(
-          height: width / 10,
-          color: Colors.black26,
-          child: Padding(
-            padding: EdgeInsets.only(top: 5),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SmoothPageIndicator(
-                  count: count,
-                  controller: controller,
-                  effect: JumpingDotEffect(
-                      dotWidth: width / 20,
-                      dotHeight: width / 30,
-                      verticalOffset: 5,
-                      spacing: width / 40),
-                ),
-              ],
-            ),
-          ),
-        ))
-        : Scaffold(
-      body: PageView.builder(
-          itemBuilder: (context, index) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+                  );
+                },
+                controller: controller,
+                itemCount: count),
+            bottomSheet: Container(
+              color: Colors.black26,
+              height: width / 15,
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: width / 18,bottom: width/40),
-                        child: Text(
-                          widget.gameEntity[index].name,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: dikeyFontSize + 20),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: width / 18, left: width / 1.5 ,right: 15),
-                      child: PopupMenuButton(
-                        onSelected: (value) {
-                          setState(() {
-                            if (value == 2) {
-                              allertDialog(context);
-                            }
-                          });
-                        },
-                        icon: Icon(Icons.more_vert_outlined,size: 35,),
-                        constraints: BoxConstraints.expand(
-                            width: 150, height: 200),
-                        color: Colors.grey,
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(20))),
-                        itemBuilder: (context) => [
-                          PopupMenuItem(
-                            value: 0,
-                            child: Center(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.add_circle_outline),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 8.0),
-                                      child: Text("Yakınlaştır"),
-                                    )
-                                  ],
-                                )),
-                            onTap: () {
-                              setState(() {
-                                dikeyFontSize += 5;
-                              });
-                            },
-                          ),
-                          PopupMenuItem(
-                            value: 1,
-                            child: Center(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                        Icons.remove_circle_outline_outlined),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 8.0),
-                                      child: Text("Uzaklastır"),
-                                    )
-                                  ],
-                                )),
-                            onTap: () {
-                              setState(() {
-                                dikeyFontSize -= 5;
-                              });
-                            },
-                          ),
-                          PopupMenuItem(
-                            value: 2,
-                            child: Center(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.search_off_outlined),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        right: 45,
-                                      ),
-                                      child: Text(" Bul"),
-                                    )
-                                  ],
-                                )),
-                          ),
-                          PopupMenuItem(
-                            value: 3,
-                            child: Center(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.share_arrival_time_outlined),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        right: 15,
-                                      ),
-                                      child: Text(" Paylaş"),
-                                    )
-                                  ],
-                                )),
-                            onTap: () async {
-                              await Share.share(selected);
-                            },
-                          )
-                        ],
-                      ),
+                    SmoothPageIndicator(
+                      count: count,
+                      controller: controller,
+                      effect: JumpingDotEffect(
+                          dotWidth: width / 20,
+                          dotHeight: width / 30,
+                          verticalOffset: 20,
+                          spacing: width / 40),
                     ),
                   ],
                 ),
-                Flexible(
-                  child: SingleChildScrollView(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        (widget.gameEntity[index].imagePath.isNotEmpty
-                            ? Padding(
-                          padding: EdgeInsets.only(
-                              top: width / 50, right: width / 25),
-                          child: SizedBox(
-                              width: width/1.5,
-                              height: width / 1.5,
-                              child: Image.asset(widget
-                                  .gameEntity[index].imagePath)),
-                        )
-                            : Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(top: width / 15),
-                              child: CircularProgressIndicator(
-                                color: Colors.red,
-                              ),
-                            ))),
-                        Expanded(
-                          child: Container(
-                            height: width,
-                            child: SingleChildScrollView(
-                              child: SelectableText(
-                                widget.gameEntity[index].Text,
-                                onSelectionChanged:
-                                    (TextSelection selection, cause) {
-                                  selected = "";
-                                  selected = widget.gameEntity[index].Text
-                                      .substring(selection.start ,
-                                      selection.end );
-                                },
-                                style: TextStyle(
-                                    fontSize: dikeyFontSize,
-                                    height: 1.5,
-                                    color: Colors.black,
-                                    letterSpacing: 0.5),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            );
-          },
-          controller: controller,
-          itemCount: count),
-      bottomSheet: Container(
-        color: Colors.black26,
-        height: width / 10,
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SmoothPageIndicator(
-                count: count,
-                controller: controller,
-                effect: JumpingDotEffect(
-                    dotWidth: width / 20,
-                    dotHeight: width / 30,
-                    verticalOffset: 20,
-                    spacing: width / 40),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 
   allertDialog(context) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: Colors.white,
-            title: Text("Kelime ara"),
-            content: Form(
-              key: _key,
-              child: TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        borderSide: BorderSide(
-                          color: Colors.grey,
-                          width: 2.0,
-                        ),
-                      ))),
+          return SingleChildScrollView(
+            child: AlertDialog(
+              backgroundColor: Colors.white,
+              title: Text("Kelime ara"),
+              content: Form(
+                key: _key,
+                child: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 2.0,
+                      ),
+                    ))),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _controller.text = "";
+                        seacrh.clear();
+                        isSearch = false;
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: Text("çıkış")),
+                TextButton(
+                    onPressed: () {
+                      setState(() {
+                        seacrh.clear();
+                        isSearch = true;
+                        seacrh.add(_controller.text);
+                        _controller.text = "";
+
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: Text("ara")),
+              ],
             ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    _controller.text = "";
-                    Navigator.pop(context);
-                  },
-                  child: Text("çıkış")),
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      //findWord(_controller.text);
-                    });
-                  },
-                  child: Text("ara")),
-            ],
           );
         });
   }

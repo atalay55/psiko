@@ -52,6 +52,7 @@ class CartTheme extends StatelessWidget {
                         child:entities[index]
                             .imagePath.isNotEmpty? ClipRRect(
                           child: Image(
+                            width: width,
                             image: AssetImage(
                                 entities[index]
                                     .imagePath),

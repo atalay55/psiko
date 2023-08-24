@@ -1,39 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:psiko/Database/EntityDb.dart';
 import 'package:psiko/Entity/Entity.dart';
+import 'package:psiko/Theme/ErrorWidgetTheme.dart';
 import '../../Theme/CartTheme.dart';
 
 class DescAgePage extends StatelessWidget {
-
-  late final width;
-
-
-  DescAgePage({required this.width});
-
-
-  FirebaseFirestore fire = FirebaseFirestore.instance;
-
-  Future<List<Entity>> getEntity() async {
-    late List<Entity> entites = [];
-    entites.clear();
-    await FirebaseFirestore.instance
-        .collection("AgeEntity")
-        .get()
-        .then((QuerySnapshot q) {
-      q.docs.forEach((element) {
-        entites.add(Entity(name: element["name"], imagePath: element["image"]));
-      });
-    });
-    return entites;
-  }
-
-
+  late double width;
+  DescAgePage(this.width);
   @override
   Widget build(BuildContext context) {
       return Scaffold(
-          backgroundColor: Color.fromRGBO(217, 210, 229, 100),
+          backgroundColor: const Color.fromRGBO(217, 210, 229, 100),
           body: FutureBuilder<List<Entity>>(
-              future: getEntity(),
+              future: EntityDb().getEntity("AgeEntity"),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
@@ -62,20 +41,7 @@ class DescAgePage extends StatelessWidget {
                     ],
                   );
                 } else {
-                  return Container(
-                    child: Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                         CircularProgressIndicator(
-                           color: Colors.black,
-
-                         )
-                        ],
-                      ),
-                    ),
-                  );
+                 return ErrorWidgetTheme();
                 }
               }));
 

@@ -13,7 +13,7 @@ class AgePage extends StatelessWidget {
 
     final isMobile = MediaQuery.of(context).size.shortestSide<600;
     return isMobile ? MobileAgePage( )
-        : DescAgePage(width: width);
+        : DescAgePage(width);
 
     }
 

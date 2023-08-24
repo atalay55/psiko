@@ -1,33 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:psiko/Models/ZoomCubicModel.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:psiko/controller/utilities.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
 class MyTextTheme extends StatelessWidget
 {
+  late String recess="          ";
   late bool isSearch;
   late List<String> seacrh;
   late double width;
   late String ?txt;
-  late String selected;
-  late double dikeyFontSize;
+  late double fontSize;
+
    MyTextTheme({required this.isSearch, required this.width,
-    required this.txt,required this.selected,required this.dikeyFontSize,required this.seacrh});
+    required this.txt,required this.fontSize,required this.seacrh});
 
   @override
   Widget build(BuildContext context) {
+
+
     return isSearch? Padding(
       padding: EdgeInsets.only(
           left: 8.0, right: 8, top: width / 50),
       child: SubstringHighlight(
           caseSensitive: false,
           terms: seacrh,
-          text:"          "+txt! ,
+          text:recess+txt! ,
           textAlign: TextAlign.justify,
           textStyleHighlight: const TextStyle(color: Colors.red),
           textStyle: GoogleFonts.notoSerif(
               wordSpacing: 1.5,
               color: Colors.black,
-              fontSize: dikeyFontSize,
+              fontSize: fontSize,
               ),
           words: true),
     ) :Padding(
@@ -45,7 +52,8 @@ class MyTextTheme extends StatelessWidget
             textAlign: TextAlign.justify,
             scrollPhysics: const ClampingScrollPhysics(),
             onSelectionChanged: (TextSelection selection, cause) {
-              selected=txt!.substring(selection.start-10,selection.end-10);
+              String selected=txt!.substring(selection.start-10,selection.end-10);
+              Get.find<Utilities>().setSelected(selected);
 
             },
             enableInteractiveSelection: true,
@@ -57,17 +65,19 @@ class MyTextTheme extends StatelessWidget
                   color: Colors.black,
                   height: width / 400),
               children: <TextSpan>[
-                const TextSpan(text: "          "),
+                 TextSpan(text: recess),
                 TextSpan(
                     text: txt,
-                    style:  GoogleFonts.notoSerif(
+                    style: GoogleFonts.notoSerif(
                       wordSpacing: 1.5,
                       color: Colors.black,
-                      fontSize: dikeyFontSize,
-                    ))
+                      fontSize: fontSize,
+                    )),
+
               ],
             ),
           ),
+
         ));
   }
 }

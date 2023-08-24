@@ -1,10 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:psiko/Database/EntityDb.dart';
 import 'package:psiko/Theme/MyTextTheme.dart';
-import 'package:share_plus/share_plus.dart';
-
+import 'package:psiko/Theme/myPopMenu.dart';
 import '../../Entity/InfoEntity.dart';
+import '../../Models/ZoomCubicModel.dart';
 
 class DesktopDescriptionPage extends StatefulWidget{
   final String indexNum;
@@ -12,13 +13,7 @@ class DesktopDescriptionPage extends StatefulWidget{
 
   @override
   State<DesktopDescriptionPage> createState() => _DesktopDescriptionPageState();
-  FirebaseFirestore fire = FirebaseFirestore.instance;
-  Future<InfoEntity> getInfo() async {
-    CollectionReference ageInfo = fire.collection("AgeInformation");
-    var entityInfo = ageInfo.doc(indexNum);
-    var response= await entityInfo.get();
-    return InfoEntity(name: response["name"], p1:response["p1"],p2:response["p2"],
-        p3:response["p3"],p4: response["p4"] );}
+
 }
 
 class _DesktopDescriptionPageState extends State<DesktopDescriptionPage> {
@@ -26,9 +21,7 @@ class _DesktopDescriptionPageState extends State<DesktopDescriptionPage> {
   late double width = MediaQuery.of(context).size.shortestSide;
   TextEditingController _controller = TextEditingController();
   var _key = GlobalKey<FormState>();
-  late double dikeyFontSize = width / 25;
   late double fontheigth = width / 600;
-  late String selected="";
   late List<String> search=[];
   late bool isSearch =false;
 
@@ -41,11 +34,9 @@ class _DesktopDescriptionPageState extends State<DesktopDescriptionPage> {
     return Scaffold(
         backgroundColor: Color.fromRGBO(250, 250, 250, 30),
         body: FutureBuilder<InfoEntity>(
-          future: widget.getInfo(),
+          future: EntityDb().getInfo(widget.indexNum,"AgeInformation"),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-
-
               return Padding(
                 padding: portrait
                     ? EdgeInsets.only(top: width / 18)
@@ -54,147 +45,41 @@ class _DesktopDescriptionPageState extends State<DesktopDescriptionPage> {
                   child: InteractiveViewer(
                     child: Padding(
                       padding: EdgeInsets.only(left: 4.0, right: 4.0),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Flexible(
-                                child: Center(
-                                  child: Padding(
-                                    padding: portrait
-                                        ? EdgeInsets.only(top: width / 20)
-                                        : EdgeInsets.only(top: width / 20),
-                                    child: Text(snapshot.data!.name,
-                                        style: GoogleFonts.poppins(
-                                            fontSize: dikeyFontSize + 15,
-                                            color: Color.fromRGBO(
-                                                140, 17, 27, 100),
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: 15,
-                                ),
-                                child: PopupMenuButton(
-                                  onSelected: (value) {
-                                    setState(() {
-                                      if (value == 2) {
-                                        allertDialog(context);
-                                      }
-                                    });
-                                  },
-                                  icon: Icon(Icons.more_vert_outlined),
-                                  constraints: BoxConstraints.expand(
-                                      width: 150, height: 200),
-                                  color: Colors.grey,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20))),
-                                  itemBuilder: (context) => [
-                                    PopupMenuItem(
-                                      value: 0,
-                                      child: Center(
-                                          child: Row(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            children: [
-                                              Icon(Icons.add_circle_outline),
-                                              Padding(
-                                                padding: EdgeInsets.only(left: 8.0),
-                                                child: Text("Yakınlaştır"),
-                                              )
-                                            ],
-                                          )),
-                                      onTap: () {
-                                        setState(() {
-                                          dikeyFontSize += 5;
-                                          print(dikeyFontSize);
-                                        });
-                                      },
-                                    ),
-                                    PopupMenuItem(
-                                      value: 1,
-                                      child: Center(
-                                          child: Row(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            children: [
-                                              Icon(Icons
-                                                  .remove_circle_outline_outlined),
-                                              Padding(
-                                                padding: EdgeInsets.only(left: 8.0),
-                                                child: Text("Uzaklastır"),
-                                              )
-                                            ],
-                                          )),
-                                      onTap: () {
-                                        setState(() {
-                                          dikeyFontSize -= 5;
-                                        });
-                                      },
-                                    ),
-                                    PopupMenuItem(
-                                      value: 2,
-                                      child: Center(
-                                          child: Row(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            children: [
-                                              Icon(Icons.search_off_outlined),
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                  right: 45,
-                                                ),
-                                                child: Text(" Bul"),
-                                              )
-                                            ],
-                                          )),
-                                    ),
-                                    PopupMenuItem(
-                                      value: 3,
-                                      child: Center(
-                                          child: Row(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            children: [
-                                              Icon(Icons.share_arrival_time_outlined),
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                  right: 15,
-                                                ),
-                                                child: Text(" Paylaş"),
-                                              )
-                                            ],
-                                          )),
-                                      onTap: ()async{
-                                        print(selected+ "selected");
-                                        await Share.share(selected.isNotEmpty? selected: " ");
-                                      },
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          MyTextTheme(isSearch: isSearch, width: width, txt: snapshot.data!.p1, selected: selected, dikeyFontSize: dikeyFontSize, seacrh: search),
-                          MyTextTheme(isSearch: isSearch, width: width, txt: snapshot.data!.p2, selected: selected, dikeyFontSize: dikeyFontSize, seacrh: search),
-                          MyTextTheme(isSearch: isSearch, width: width, txt: snapshot.data!.p3, selected: selected, dikeyFontSize: dikeyFontSize, seacrh: search),
-                          MyTextTheme(isSearch: isSearch, width: width, txt: snapshot.data!.p4, selected: selected, dikeyFontSize: dikeyFontSize, seacrh: search),
 
-                        ],
-                      ),
+                      child:   BlocBuilder<ZoomCubicModel,int>(
+                          builder: (context,fontsize){return Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                    child: Center(
+                                      child: Padding(
+                                        padding: portrait
+                                            ? EdgeInsets.only(top: width / 20)
+                                            : EdgeInsets.only(top: width / 20),
+                                        child:
+                                        Text(snapshot.data!.name,
+                                            style: GoogleFonts.poppins(
+                                                fontSize: fontsize + 15,
+                                                color: Color.fromRGBO(
+                                                    140, 17, 27, 100),
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                    ),
+                                  ),
+                                  myPopMenu( allertDialog: allertDialog)
+                                ]
+                              ),
+                              MyTextTheme(isSearch: isSearch, width: width, txt: snapshot.data!.p1,  fontSize: fontsize.toDouble(), seacrh: search),
+                              MyTextTheme(isSearch: isSearch, width: width, txt: snapshot.data!.p2, fontSize: fontsize.toDouble(), seacrh: search),
+                              MyTextTheme(isSearch: isSearch, width: width, txt: snapshot.data!.p3,  fontSize: fontsize.toDouble(), seacrh: search),
+                              MyTextTheme(isSearch: isSearch, width: width, txt: snapshot.data!.p4,  fontSize: fontsize.toDouble(), seacrh: search),
+                              MyTextTheme(isSearch: isSearch, width: width, txt: snapshot.data!.p5,  fontSize: fontsize.toDouble(), seacrh: search),
+
+                            ],
+                          );})
                     ),
                   ),
                 ),
@@ -222,47 +107,49 @@ class _DesktopDescriptionPageState extends State<DesktopDescriptionPage> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: Colors.white,
-            title: Text("Kelime ara"),
-            content: Form(
-              key: _key,
-              child: TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        borderSide: BorderSide(
-                          color: Colors.grey,
-                          width: 2.0,
-                        ),
-                      ))),
+          return SingleChildScrollView(
+            child: AlertDialog(
+              backgroundColor: Colors.white,
+              title: Text("Kelime ara"),
+              content: Form(
+                key: _key,
+                child: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                          borderSide: BorderSide(
+                            color: Colors.grey,
+                            width: 2.0,
+                          ),
+                        ))),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _controller.text = "";
+                        search.clear();
+                        isSearch=false;
+                        Navigator.pop(context);
+                      });
+
+                    },
+                    child: Text("çıkış")),
+                TextButton(
+                    onPressed: () {
+                      setState(() {
+                        search.clear();
+                        isSearch=true;
+                        search.add(_controller.text);
+                        _controller.text = "";
+
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: Text("ara")),
+              ],
             ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _controller.text = "";
-                      search.clear();
-                      isSearch=false;
-                      Navigator.pop(context);
-                    });
-
-                  },
-                  child: Text("çıkış")),
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      search.clear();
-                      isSearch=true;
-                      search.add(_controller.text);
-                      _controller.text = "";
-
-                      Navigator.pop(context);
-                    });
-                  },
-                  child: Text("ara")),
-            ],
           );
         });
   }
