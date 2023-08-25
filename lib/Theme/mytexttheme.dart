@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:psiko/Models/ZoomCubicModel.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:psiko/controller/utilities.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
 class MyTextTheme extends StatelessWidget
 {
-  late String recess="          ";
+  late String recess="";
   late bool isSearch;
   late List<String> seacrh;
   late double width;
@@ -20,7 +18,6 @@ class MyTextTheme extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-
 
     return isSearch? Padding(
       padding: EdgeInsets.only(

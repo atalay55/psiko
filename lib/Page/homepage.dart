@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:psiko/Entity/Entity.dart';
-import 'package:psiko/Page/GamePage.dart';
+import 'package:psiko/Entity/entity.dart';
+import 'package:psiko/Page/gamepage.dart';
 
-import 'AgePage.dart';
+import 'agepage.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,8 +12,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late double width = MediaQuery.of(context).size.width;
-  late double height = MediaQuery.of(context).size.height;
+  late double width = Get.width;
+  late double height =Get.height;
   List<Entity> entity = [
     Entity(name: "Yas Dönemleri", imagePath: "images/firstImage.jpg"),
     Entity(name: "Oyunlar", imagePath: "images/secondImage.jpg"),
@@ -34,7 +35,7 @@ class _HomePageState extends State<HomePage> {
            children: [
              GestureDetector(
              onTap: (){
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>AgePage(isGame: false,)));
+             Get.to(AgePage());
       },
           child: Container(
             height: height/3,
@@ -50,7 +51,7 @@ class _HomePageState extends State<HomePage> {
       ),
              GestureDetector(
                onTap: (){
-                 Navigator.push(context, MaterialPageRoute(builder: (context)=>GamePage()));
+               Get.to(GamePage());
                },
                child: Container(
                  height: height/3,

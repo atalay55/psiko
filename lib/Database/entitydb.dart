@@ -1,6 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:psiko/Entity/Entity.dart';
 
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../Entity/Entity.dart';
 import '../Entity/GameEntity.dart';
 import '../Entity/InfoEntity.dart';
 

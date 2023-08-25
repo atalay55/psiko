@@ -1,24 +1,23 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:psiko/Database/EntityDb.dart';
-import 'package:psiko/Theme/ErrorWidgetTheme.dart';
-import 'package:psiko/Theme/MyTextTheme.dart';
-import 'package:psiko/controller/utilities.dart';
-import '../../Entity/InfoEntity.dart';
-import '../../Models/search.dart';
 
-class MobileDescriptionPage extends StatefulWidget {
+import '../../Database/EntityDb.dart';
+import '../../Entity/InfoEntity.dart';
+import '../../Theme/ErrorWidgetTheme.dart';
+import '../../Theme/MyTextTheme.dart';
+import '../../controller/utilities.dart';
+
+class AgeDescriptionPage extends StatefulWidget {
   final String indexNum;
 
-  MobileDescriptionPage({required this.indexNum});
+  AgeDescriptionPage({required this.indexNum});
 
   @override
-  State<MobileDescriptionPage> createState() => _MobileDescriptionPageState();
+  State<AgeDescriptionPage> createState() => _AgeDescriptionPageState();
 }
 
-class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
+class _AgeDescriptionPageState extends State<AgeDescriptionPage> {
   late double width = MediaQuery.of(context).size.shortestSide;
   late bool isSearch = false;
   late List<String> search = [];
@@ -30,8 +29,6 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
   List<String?> textList = []; // Tüm metin parçalarını içeren liste
   @override
   Widget build(BuildContext context) {
-    late bool portrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
         backgroundColor: Color.fromRGBO(250, 250, 250, 30), //
         appBar: AppBar(
@@ -47,13 +44,18 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
               color: Colors.black, // Geri düğmesi rengi
             ),
             actions: [
-              isSearch?IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isSearch = false;
-                    });
-                  },
-                  icon: Icon(Icons.clear)):Text(""),
+              isSearch
+                  ? IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isSearch = false;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.clear,
+                        color: Colors.black,
+                      ))
+                  : Text(""),
               IconButton(
                 onPressed: () {
                   setState(() {
@@ -82,12 +84,12 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
 
               return Padding(
                 padding: EdgeInsets.only(top: width / 40),
-                child: SingleChildScrollView(
-                  child: Container(
-                    height: Get.height,
-                    child: InteractiveViewer(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 4.0, right: 4.0),
+                child: Container(
+                  height: Get.height,
+                  child: InteractiveViewer(
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 4.0, right: 4.0),
+                      child: SingleChildScrollView(
                         child: Column(
                           children: [
                             Row(
@@ -97,12 +99,13 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
                                 Flexible(
                                   child: Center(
                                     child: Padding(
-                                        padding:EdgeInsets.only(top: width / 20),
+                                        padding:
+                                            EdgeInsets.only(top: width / 20),
                                         child: Text(snapshot.data!.name,
                                             style: GoogleFonts.poppins(
-                                                fontSize:
-                                                    fontSizeCont.count.value +
-                                                        12,
+                                                fontSize: fontSizeCont
+                                                        .fontSize.value +
+                                                    12,
                                                 color: Color.fromRGBO(
                                                     140, 17, 27, 100),
                                                 fontWeight: FontWeight.bold))),
@@ -116,7 +119,8 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
                                 isSearch: isSearch,
                                 width: width,
                                 txt: textList[i],
-                                fontSize: fontSizeCont.count.value.toDouble(),
+                                fontSize:
+                                    fontSizeCont.fontSize.value.toDouble(),
                               ),
                           ],
                         ),
@@ -138,20 +142,39 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
         builder: (BuildContext context) {
           return SingleChildScrollView(
             child: AlertDialog(
-              backgroundColor: Colors.white,
-              title: Text("Kelime ara"),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                    16.0), // İstediğiniz köşe yuvarlatma değerini belirleyebilirsiniz.
+              ),
+              backgroundColor: Colors.black54,
+              title: Text("Kelime ara", style: TextStyle(color: Colors.white)),
               content: Form(
                 key: _key,
                 child: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                      borderSide: BorderSide(
-                        color: Colors.grey,
-                        width: 2.0,
+                  controller: _controller,
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white10,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        borderSide: BorderSide(
+                          color: Colors.white,
+                          width: 2.0,
+                        ),
                       ),
-                    ))),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                          borderSide: BorderSide(
+                            color: Colors.black54,
+                            width: 2.0,
+                          ))),
+                  style: TextStyle(
+                    color:
+                        Colors.white, // Yazı rengini burada belirleyebilirsiniz
+                    fontSize: 16, // Yazı boyutunu burada belirleyebilirsiniz
+                    // Diğer stil özelliklerini de ekleyebilirsiniz
+                  ),
+                ),
               ),
               actions: [
                 TextButton(
@@ -163,7 +186,8 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
                         Navigator.pop(context);
                       });
                     },
-                    child: Text("çıkış")),
+                    child:
+                        Text("çıkış", style: TextStyle(color: Colors.white))),
                 TextButton(
                     onPressed: () {
                       setState(() {
@@ -202,7 +226,7 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
                         Navigator.pop(context);
                       });
                     },
-                    child: Text("ara")),
+                    child: Text("ara", style: TextStyle(color: Colors.white))),
               ],
             ),
           );
@@ -211,10 +235,11 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
 
   void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
-      backgroundColor: Colors.black87,
+      backgroundColor: Colors.black54,
       shape: RoundedRectangleBorder(
-     borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)), // Köşeleri yuvarlatma
-    ) ,
+        borderRadius: BorderRadius.vertical(
+            top: Radius.circular(16.0)), // Köşeleri yuvarlatma
+      ),
       context: context,
       builder: (BuildContext context) {
         return Container(
@@ -228,7 +253,10 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
                   Icons.add_circle_outline,
                   color: Colors.white,
                 ),
-                title: Text("Yakınlaştır",style: TextStyle(color: Colors.white),),
+                title: Text(
+                  "Yakınlaştır",
+                  style: TextStyle(color: Colors.white),
+                ),
                 onTap: () {
                   setState(() {
                     fontSizeCont.increment();
@@ -241,7 +269,8 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
                   Icons.remove_circle_outline_outlined,
                   color: Colors.white,
                 ),
-                title: Text("Uzaklastır" ,style: TextStyle(color: Colors.white)),
+                title:
+                    Text("Uzaklastır", style: TextStyle(color: Colors.white)),
                 onTap: () {
                   setState(() {
                     fontSizeCont.discrement();
@@ -254,7 +283,7 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
                   Icons.search_off_outlined,
                   color: Colors.white,
                 ),
-                title: Text("Bul" ,style: TextStyle(color: Colors.white)),
+                title: Text("Bul", style: TextStyle(color: Colors.white)),
                 onTap: () {
                   setState(() {
                     allertDialog(context);
@@ -266,7 +295,7 @@ class _MobileDescriptionPageState extends State<MobileDescriptionPage> {
                   Icons.share_arrival_time_outlined,
                   color: Colors.white,
                 ),
-                title: Text("Paylaş" ,style: TextStyle(color: Colors.white)),
+                title: Text("Paylaş", style: TextStyle(color: Colors.white)),
                 onTap: () {
                   setState(() {
                     fontSizeCont.shareSelected();

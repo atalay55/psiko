@@ -2,9 +2,9 @@ import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
 class Utilities extends GetxController{
-  final count = 15.obs;
-  increment() => count.value = count.value+5;
-  discrement()=> count.value= count.value-5;
+  final fontSize = 15.obs;
+  increment() => fontSize.value = fontSize.value+5;
+  discrement()=> fontSize.value= fontSize.value-5;
 
 
   var selected = "".obs;
@@ -17,4 +17,6 @@ class Utilities extends GetxController{
   void shareSelected() {
     Share.share(selected.value.isNotEmpty ? selected.value : " ");
   }
+
+
 }

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:psiko/Entity/Entity.dart';
-import '../Page/DescriptionPage.dart';
 
-class CartTheme extends StatelessWidget {
+import '../Mobile/AgePsiko/agedescriptionpage.dart';
+import '../Mobile/GamePsiko/gamedescriptionpage.dart';
 
-  late double width;
+
+class GridViewTheme extends StatelessWidget {
   late List<Entity> entities;
   late bool  isGame;
-
-  CartTheme({required this.entities,required this.width, required this.isGame});
+  GridViewTheme({required this.entities, required this.isGame});
 
   @override
   Widget build(BuildContext context) {
+    var width = Get.width;
     return Expanded(
       child: GridView.builder(
           gridDelegate:
@@ -28,12 +30,8 @@ class CartTheme extends StatelessWidget {
             return GestureDetector(
               onTap: () {
 
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (contex) =>
+            Get.to(isGame? GameDescriptionPage(dataName: entities[index].name,):AgeDescriptionPage(indexNum: (index+1).toString(),));
 
-                              DescriptionPage(indexNum: (index+1).toString(),isGame: isGame,dataName: entities[index].name ,)));
 
               },
               child: Card(

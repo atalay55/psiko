@@ -1,15 +1,15 @@
 
+
 import 'package:flutter/material.dart';
-import 'package:psiko/Database/EntityDb.dart';
 
-import '../../Entity/Entity.dart';
-import '../../Theme/CartTheme.dart';
+import '../Database/EntityDb.dart';
+import '../Entity/Entity.dart';
+import '../Theme/gridviewtheme.dart';
 
-class mobileGamePage extends StatelessWidget {
-
-
+class GamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Color.fromRGBO(232, 208 , 182, 100),
@@ -36,8 +36,7 @@ class mobileGamePage extends StatelessWidget {
                             fontSize: 25),
                       ),
                     ),
-                    CartTheme(
-                      width: width,
+                    GridViewTheme(
                       entities: snapshot.data!,
                       isGame: true,
                     ),
@@ -59,7 +58,7 @@ class mobileGamePage extends StatelessWidget {
                   ),
                 );
               }
-            }));
-  }
-}
+            }));}
 
+
+}
